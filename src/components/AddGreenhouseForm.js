@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './AddGreenhouseForm.css'
 import CloseFormIcon from '../imgs/close-form-icon.png'
 import UploadIcon from '../imgs/upload-icon.png'
+import AddGreenhouseToMap from './AddGreenhouseToMap';
 
 
 function AddGreenhouseForm(props) {
@@ -11,6 +12,7 @@ function AddGreenhouseForm(props) {
   const [submitError, setSubmitError] = useState(false);
   const [imagePath, setImagePath] = useState(props.greenhouseToEdit ? props.greenhouseToEdit.imgPath : "");
   const [realImage, setRealImage] = useState(null);
+  const [latLng, setLatLng] = useState([]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -47,12 +49,11 @@ function AddGreenhouseForm(props) {
       formData.append("location", location);
       formData.append("imgPath", imagePath);
       formData.append("img", realImage);
+      formData.append("lat", latLng.length != 0 ? latLng[0].lat: null);
+      formData.append("lng", latLng.length != 0 ? latLng[0].lng: null);
 
       fetch(`/update-greenhouse/${props.greenhouseToEdit.greenhouse_id}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-        },
         body: formData
       })
       .then (res => {
@@ -73,10 +74,6 @@ function AddGreenhouseForm(props) {
           "imgPath": imagePath,
           "img":  image ? image: null,
           "date": new Date(),
-          "temperature": 0,
-          "humidity": 0,
-          "light": 0,
-          "ventilation": 0,
           "greenhouse_id": props.greenhouseToEdit.greenhouse_id
         };
         props.updateGreenhouse(updatedGreenhouse);
@@ -92,12 +89,11 @@ function AddGreenhouseForm(props) {
       formData.append("imgPath", imagePath);
       formData.append("img", realImage);
       formData.append("date", new Date().toISOString());
+      formData.append("lat", latLng.length != 0 ? latLng[0].lat: null);
+      formData.append("lng", latLng.length != 0 ? latLng[0].lng: null);
 
       fetch('/create-greenhouse', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-        },
         body: formData
       })
       .then(res => {
@@ -118,10 +114,6 @@ function AddGreenhouseForm(props) {
           "imgPath": imagePath,
           "img": image ? image : null,
           "date": new Date(),
-          "temperature": 0,
-          "humidity": 0,
-          "light": 0,
-          "ventilation": 0,
           "greenhouse_id": data["id"] // Access 'id' from data directly
         };
         props.addGreenhouse(newGreenhouse);
@@ -145,6 +137,7 @@ function AddGreenhouseForm(props) {
         <button className='close-form-button' onClick={props.closeForm}>
           <img src={CloseFormIcon} className='close-form-icon'/>
         </button>
+
         <form>
           <label className='text-label'>
             Name:
@@ -175,6 +168,10 @@ function AddGreenhouseForm(props) {
           }
           <button type="submit" className='save-data' onClick={handleSubmit}>Save</button>
         </form>
+        <div className='add-greenhouse-to-map'>
+          {console.log(latLng)}
+          <AddGreenhouseToMap setLatLng={setLatLng} latLng={latLng}/>
+        </div>
       </div>
     </div>
   );

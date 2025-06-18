@@ -1,0 +1,26 @@
+#greenhouse-name-container {
+    width: 204px;
+    height: 34px;
+    background-color: #00AF3B;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+}
+
+#greenhouse-name-container > img {
+    width: 18px;
+    margin-left: 18px;
+}
+
+#greenhouse-name-container > span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 18px;
+    font-size: 16px;
+    
+}

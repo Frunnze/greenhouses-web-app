@@ -1,53 +1,28 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Greenhouse API",
+    "title": "Greenhouses app API",
     "description": "API for managing greenhouses",
     "version": "1.0"
   },
   "basePath": "/",
-
+  "tags": [
+    {
+      "name": "Greenhouses",
+      "description": "Initial page with the list of greenhouses."
+    },
+    {
+      "name": "Greenhouse dashboard",
+      "description": "Dashboard with all the data about a greenhouse."
+    }
+  ],
 
 
   "paths": {
-    "/token": {
-      "get": {
-        "summary": "Get access token",
-        "responses": {
-          "200": {
-            "description": "Returns JWT token",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "jwt": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "role",
-            "in": "query",
-            "description": "Role for the token",
-            "required": true,
-            "type": "string"
-          }
-        ]
-      }
-    },
-
-
-
     "/create-greenhouse": {
       "post": {
         "summary": "Create a new greenhouse",
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
+        "tags": ["Greenhouses"],
         "responses": {
           "200": {
             "description": "Greenhouse created successfully",
@@ -100,12 +75,8 @@
 
     "/get-greenhouses": {
       "get": {
-        "summary": "Get basic data about greenhouses",
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
+        "summary": "Get the list of greenhouses and their data.",
+        "tags": ["Greenhouses"],
         "responses": {
           "200": {
             "description": "Returns basic data about greenhouses",
@@ -181,11 +152,7 @@
     "/get-greenhouse/{greenhouse_id}": {
       "get": {
         "summary": "Get basic data about a greenhouse",
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
+        "tags": ["Greenhouses"],
         "responses": {
           "200": {
             "description": "Returns basic data about a greenhouse",
@@ -251,11 +218,7 @@
     "/update-greenhouse/{greenhouse_id}": {
       "put": {
         "summary": "Update a greenhouse",
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
+        "tags": ["Greenhouses"],
         "responses": {
           "200": {
             "description": "Updated successfully!"
@@ -305,16 +268,12 @@
     "/delete-greenhouse/{greenhouse_id}": {
       "delete": {
         "summary": "Delete a greenhouse",
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
+        "tags": ["Greenhouses"],
         "responses": {
           "200": {
             "description": "Greenhouse deleted successfully!"
           },
-          "404": {
+          "204": {
             "description": "The greenhouse was already deleted!"
           },
           "403": {
@@ -331,15 +290,697 @@
           }
         ]
       }
-    }    
-  },
+    },
 
 
-  "securityDefinitions": {
-    "jwt": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
+    "/get-gh-parameters-averages/{gh_id}": {
+      "get": {
+        "summary": "Get greenhouse parameters averages",
+        "tags": ["Greenhouses"],
+        "description": "Retrieve the average values of parameters for a specific greenhouse.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "gh_id",
+            "in": "path",
+            "description": "ID of the greenhouse",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Averages of greenhouse parameters",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          },
+          "404": {
+            "description": "No greenhouse with this id or no data available",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No greenhouse with this id! or No data!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/create-zone": {
+      "post": {
+        "summary": "Create a new zone",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Create a new zone within a specific greenhouse.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON object containing the details of the new zone",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "gh_id": {
+                  "type": "integer",
+                  "description": "ID of the greenhouse",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the zone",
+                  "example": "Zone 1"
+                }
+              },
+              "required": ["gh_id"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zone created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Zone created successfully!"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No greenhouse with this id",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No greenhouse with this id!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/get-zones/{gh_id}": {
+      "get": {
+        "summary": "Get zones of a greenhouse",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Retrieve the zones of a specific greenhouse along with their details.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "gh_id",
+            "in": "path",
+            "description": "ID of the greenhouse",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of zones with details",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "zone_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Zone 1"
+                  },
+                  "plant_name": {
+                    "type": "string",
+                    "example": "Tomato Plant"
+                  },
+                  "plantation_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-05-26T00:00:00Z"
+                  },
+                  "sensors": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sensor_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Temperature Sensor"
+                        },
+                        "parameter": {
+                          "type": "string",
+                          "example": "Temperature"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No greenhouse with this id or no zones available",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No greenhouse with this id! or No zones!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/get-zone-parameters-averages": {
+      "get": {
+        "summary": "Get average parameters for a zone",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Retrieve the average values of parameters for a specific zone within a greenhouse.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "gh_id",
+            "in": "query",
+            "description": "ID of the greenhouse",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "zone_id",
+            "in": "query",
+            "description": "ID of the zone",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Average parameters for the zone",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          },
+          "404": {
+            "description": "No greenhouse with this id, no zone with this id, or no data available",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No greenhouse with this id!, No zone with this id!, or No data!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/get-free-sensors": {
+      "get": {
+        "summary": "Get free (not assigned) sensors",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Retrieve all available sensors that are not assigned to any greenhouse or zone.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of free sensors",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sensor_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "sensor_name": {
+                    "type": "string",
+                    "example": "Temperature Sensor"
+                  },
+                  "parameter": {
+                    "type": "string",
+                    "example": "Temperature"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No sensors available",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No sensors!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/set-sensor": {
+      "put": {
+        "summary": "Set sensor to a zone",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Associate a sensor to a specific zone within a greenhouse.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON object containing the sensor, greenhouse, and zone IDs",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sensor_id": {
+                  "type": "integer",
+                  "description": "ID of the sensor",
+                  "example": 1
+                },
+                "zone_id": {
+                  "type": "integer",
+                  "description": "ID of the zone",
+                  "example": 1
+                },
+                "gh_id": {
+                  "type": "integer",
+                  "description": "ID of the greenhouse",
+                  "example": 1
+                }
+              },
+              "required": ["sensor_id", "zone_id", "gh_id"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sensor saved",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Sensor saved!"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such sensor, zone, or greenhouse",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No such sensor!, No such zone!, or No such gh!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+    "/unset-sensor/{sensor_id}": {
+      "put": {
+        "summary": "Unset sensor from a zone",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Remove the association of a sensor from a specific zone and greenhouse, and delete its data.",
+        "parameters": [
+          {
+            "name": "sensor_id",
+            "in": "path",
+            "description": "ID of the sensor to be unset",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sensor unset successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Sensor unset!"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such sensor",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No such sensor!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/update-zone": {
+      "put": {
+        "summary": "Update zone name",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Update the name of a specific zone.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON object containing the zone ID and the new name",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "zone_id": {
+                  "type": "integer",
+                  "description": "ID of the zone to be updated",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "description": "New name for the zone",
+                  "example": "New Zone Name"
+                }
+              },
+              "required": ["zone_id", "name"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zone updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Zone updated successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No new name provided",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No new name provided!"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such zone",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No such zone!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/delete-zone/{zone_id}": {
+      "delete": {
+        "summary": "Delete a zone, and all its data",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Delete a specific zone.",
+        "parameters": [
+          {
+            "name": "zone_id",
+            "in": "path",
+            "description": "ID of the zone to be deleted",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zone deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Zone deleted!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No such zone",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No such zone!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/get-gh-parameter-data": {
+      "get": {
+        "summary": "Get greenhouse parameter data",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Retrieve data of a specific parameter from a greenhouse",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "gh_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "description": "The ID of the greenhouse"
+          },
+          {
+            "name": "parameter",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The name of the parameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The date and time of the recorded data"
+                  },
+                  "data": {
+                    "type": "number",
+                    "description": "The recorded data"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+
+
+    "/choose-plant": {
+      "put": {
+        "summary": "Choose and plant a plant in a zone",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Choose a plant and plant it in a specified zone",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "plant_id": {
+                  "type": "integer",
+                  "description": "The ID of the plant to be planted"
+                },
+                "zone_id": {
+                  "type": "integer",
+                  "description": "The ID of the zone where the plant will be planted"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Planted!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Already Planted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+
+
+
+      "get": {
+        "summary": "Get available plants",
+        "tags": ["Greenhouse dashboard"],
+        "description": "Get the list of available plants from the database",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "plant_id": {
+                    "type": "integer",
+                    "description": "The ID of the plant"
+                  },
+                  "plant_name": {
+                    "type": "string",
+                    "description": "The name of the plant"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No plants found"
+          }
+        }
+      }
     }
+
+
+    
   }
 }

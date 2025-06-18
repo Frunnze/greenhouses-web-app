@@ -1,2 +1,5 @@
-flask-jwt-extended
+Flask
 flask-swagger-ui
+Flask-Migrate
+paho-mqtt==1.6.1
+Flask-SQLAlchemy

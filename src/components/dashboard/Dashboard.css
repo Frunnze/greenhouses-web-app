@@ -1,0 +1,37 @@
+#upper-container {
+    display: flex;
+    margin-left: 124px;
+    margin-right: 124px;
+    margin-top: 53px;
+    gap: 35px;
+}
+
+#parameters-short-container {
+    display: flex;
+    margin-left: 124px;
+    margin-right: 124px;
+    margin-top: 22px;
+    gap: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#parameters-graphs {
+    display: flex;
+    margin-left: 124px;
+    margin-right: 124px;
+    margin-top: 22px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#zones-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 124px;
+    margin-right: 124px;
+    margin-top: 22px;
+    gap: 10px;
+}

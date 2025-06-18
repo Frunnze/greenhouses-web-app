@@ -11,17 +11,31 @@
 .form-rectangle {
     position: fixed;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: column;
     background-color: white;
-    width: 510px;
+    width: 800px;
     height: 489px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px;   
+    padding-left: 40px;
+}
+
+.form-rectangle > form {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.add-greenhouse-to-map {
+    width: 56%;
+    height: 100%;
+    border-radius: 0 10px 10px 0;
+    overflow: hidden;
 }
 
 .close-form-button {
@@ -35,6 +49,7 @@
     background-color: #D9D9D9;
     transition: background-color 0.2s;
     cursor: pointer;
+    z-index: 999;
 }
 
 .close-form-button:hover {

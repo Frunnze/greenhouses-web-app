@@ -1,0 +1,33 @@
+.parameter-short-info-container {
+    width: 192px;
+    height: 70px;
+    background-color: #00AF3B;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+}
+
+.parameter-short-info-container > img {
+    width: 21px;
+    margin-right: 18px;
+}
+
+.parameter-data-side {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-left: 18px;
+}
+
+.parameter-value {
+    font-size: 24px;
+    display: block;
+}
+
+.parameter-name {
+    font-size: 18px;
+    display: block;
+}

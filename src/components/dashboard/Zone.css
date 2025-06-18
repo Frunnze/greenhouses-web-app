@@ -1,0 +1,92 @@
+/* Zone.css */
+.zone {
+    width: 350px;
+    height: 220px;
+    background-color: #00AF3B;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+}
+
+.zone h3 {
+    margin-top: 0;
+}
+
+.zone p {
+    margin: 5px 0;
+}
+
+
+#zone-name {
+    width: 204px;
+    height: 34px;
+    background-color: #00c342;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    margin-left: 20px;
+    cursor:pointer;
+    transition: background-color 0.2s;
+}
+
+#zone-name:hover {
+    background-color: #11b448;
+}
+
+#zone-name > img {
+    width: 18px;
+    margin-left: 18px;
+}
+
+#zone-name  > span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 18px;
+    font-size: 16px;
+    
+}
+
+
+.button {
+    position: relative;
+    display: inline-block;
+    left:270px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 0px;
+    background-color: #00c342;
+    justify-content: center;
+    align-items: right;
+    transition: background-color 0.1s;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.delete-button:hover {
+    background-color: #E80000;
+}
+
+.delete-icon {
+    width: 15px;
+}
+
+.delete-button.edit-button {
+    top: 8px;
+    right: 50px;
+}
+
+.delete-button.edit-button img {
+    width: 18px;
+}
+.ch-symbol{
+    color: #ffffff;
+}

@@ -1,0 +1,59 @@
+#sensor-name {
+    width: 330px;
+    height: 34px;
+    background-color: #00c342;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    
+    
+}
+
+#sensor-name > img {
+    width: 18px;
+    margin-left: 18px;
+}
+
+#sensor-name  > span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 18px;
+    font-size: 16px;
+    
+}
+
+#button {
+    position: relative;
+    display: inline-block;
+    right: 10px;
+    left:290px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 0px;
+    background-color: #00c342;
+    justify-content: center;
+    align-items: right;
+    transition: background-color 0.1s;
+    cursor: pointer;
+}
+#check {
+    position: relative;
+    display: inline-block;
+    right: 10px;
+    left:290px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border-width: 1px;
+    background-color: #00c342;
+    justify-content: center;
+    align-items: right;
+    border-color: rgb(255, 255, 255);
+
+}

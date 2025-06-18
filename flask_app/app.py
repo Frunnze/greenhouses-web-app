@@ -2,16 +2,14 @@ from flask import Flask
 from flask_migrate import Migrate
 import os
 import threading 
-import random
-import time
-from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint 
 
 import mqtt_connector
 from db import db
 from models import (
     Greenhouse, Parameter,
-    Sensor, SensorData
+    Sensor, SensorData, Plant,
+    Condition
 )
 
 
@@ -34,18 +32,10 @@ def create_app():
     app.register_blueprint(swaggerui_blueprint)
 
     # Manage the routes
-    from greenhouses import greenhouses
-    from mqtt_routes import mqtt
+    from views.greenhouses import greenhouses
+    from views.dashboard import dashboard
     app.register_blueprint(greenhouses, url_prefix='/')
-    app.register_blueprint(mqtt, url_prefix='/mqtt/')
-
-    # Init the JWT
-    # Configuration
-    app.config['SECRET_KEY'] = 'dasEEEDADASDASD@E#@DASD'
-    app.config["JWT_SECRET_KEY"] = "DASsds2e#@e23eSDAD.ED2D2/3!@QWQ"
-    app.config['JWT_TOKEN_LOCATION'] = ['headers']
-
-    jwt = JWTManager(app)
+    app.register_blueprint(dashboard)
     
     create_db(app)
     migrate = Migrate(app, db)
@@ -62,31 +52,32 @@ def create_db(app):
                 db.session.add(Parameter(name="temperature", unit="celsius"))
                 db.session.add(Parameter(name="humidity", unit="%"))
                 db.session.add(Parameter(name="light", unit="%"))
-                db.session.add(Parameter(name="ventilation", unit="%"))
-                db.session.commit()
-            if db.session.query(Sensor).count() == 0:
-                db.session.add(Sensor(name="NTC", parameter_id=1))
-                db.session.add(Sensor(name="RTDs", parameter_id=1))
-                db.session.add(Sensor(name="DHT11", parameter_id=2))
-                db.session.add(Sensor(name="SHT31", parameter_id=2))
-                db.session.add(Sensor(name="Photodiodes", parameter_id=3))
-                db.session.add(Sensor(name="Phototransistors", parameter_id=3))
-                db.session.add(Sensor(name="HVAC", parameter_id=4))
-                db.session.commit()
-            if db.session.query(SensorData).count() == 0:
-                for i in range(20):
-                    time.sleep(2)
-                    db.session.add(SensorData(
-                        zone_id=random.randint(1, 3), 
-                        sensor_id=random.randint(1, 7), 
-                        data=random.randint(1, 100)
-                    ))
-                    db.session.commit()      
+                db.session.add(Parameter(name="air_pressure", unit="pascal"))
+                db.session.add(Parameter(name="soil_moisture", unit="%"))
+                db.session.commit()   
+            if db.session.query(Plant).count() == 0:
+                db.session.add(Plant(name="Tomato"))
+                db.session.add(Plant(name="Radish"))
+                db.session.commit()   
+            if db.session.query(Condition).count() == 0:
+                db.session.add(Condition(plant_id=1, parameter_id=1, value=22, order=1, duration=60))
+                db.session.add(Condition(plant_id=1, parameter_id=2, value=50, order=1, duration=60))
+                db.session.add(Condition(plant_id=1, parameter_id=3, value=90, order=1, duration=60))
+                db.session.add(Condition(plant_id=1, parameter_id=5, value=60, order=1, duration=60))
+
+                db.session.add(Condition(plant_id=2, parameter_id=1, value=15, order=1, duration=30))
+                db.session.add(Condition(plant_id=2, parameter_id=2, value=50, order=1, duration=30))
+                db.session.add(Condition(plant_id=2, parameter_id=3, value=70, order=1, duration=30))
+                db.session.add(Condition(plant_id=2, parameter_id=5, value=55, order=1, duration=30))
+                
+                db.session.commit()   
             print("DB was created!")
 
+
+app = create_app()
 if __name__ == '__main__': 
     # Start MQTT Subscriber in a separate thread 
-    mqtt_thread = threading.Thread(target=mqtt_connector.run_mqtt_subscriber) 
+    mqtt_thread = threading.Thread(target=mqtt_connector.run_mqtt_subscriber)
     mqtt_thread.start() 
 
-    create_app().run(debug=True)
+    app.run(debug=False)

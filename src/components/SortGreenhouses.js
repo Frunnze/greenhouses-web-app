@@ -20,7 +20,7 @@ function SortGreenhouses({ handleSort }) {
                 <option value="temperature">Sort by: Temperature</option>
                 <option value="humidity">Sort by: Humidity</option>
                 <option value="light">Sort by: Light</option>
-                <option value="ventilation">Sort by: Ventilation</option>
+                <option value="ventilation">Sort by: Soil moisture</option>
             </select>
         </>
     )
