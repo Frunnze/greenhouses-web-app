@@ -1,8 +1,8 @@
 from paho.mqtt import client as mqtt_client 
-import mqtt_access
 import random
 import json
-import time
+from dotenv import load_dotenv
+import os
 
 from db import db
 from models import (
@@ -10,12 +10,13 @@ from models import (
 )
 
 # MQTT Broker details 
-broker = mqtt_access.host
-port = mqtt_access.port 
+load_dotenv()
+broker = os.getenv("MQTT_BROKER")
+port = int(os.getenv("MQTT_PORT"))
 client_id = f'subscribe-{random.randint(0, 1000)}' 
-username = mqtt_access.username
-password = mqtt_access.password
- 
+username = os.getenv("MQTT_USERNAME")
+password = os.getenv("MQTT_PASSWORD")
+
 def connect_mqtt(): 
     def on_connect(client, userdata, flags, rc): 
         if rc == 0: 
@@ -28,7 +29,7 @@ def connect_mqtt():
     client.tls_set(ca_certs='./IoT.crt')
     client.on_connect = on_connect 
     client.connect(broker, port) 
-    return client 
+    return client
 client = connect_mqtt() 
 
  
@@ -114,4 +115,4 @@ def publish_mqtt(topic, message):
 
 def run_mqtt_subscriber(): 
     client.loop_start() 
-    subscribe(client) 
+    subscribe(client)
